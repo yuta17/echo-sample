@@ -9,12 +9,8 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	log "github.com/sirupsen/logrus"
+	"github.com/yuta17/hyperlp/model"
 )
-
-type Subscribe struct {
-	gorm.Model
-	Email string `gorm:"unique;not null"`
-}
 
 func createSubscribe(c echo.Context) error {
 	db, err := gorm.Open("mysql",
@@ -25,7 +21,7 @@ func createSubscribe(c echo.Context) error {
 		log.Panic(err)
 	}
 
-	subscribe := new(Subscribe)
+	subscribe := new(model.Subscribe)
 	if err := c.Bind(subscribe); err != nil {
 		return err
 	}
@@ -45,7 +41,7 @@ func InitMigrate() {
 	db, err := gorm.Open("mysql", hoge)
 
 	defer db.Close()
-	db.AutoMigrate(&Subscribe{})
+	db.AutoMigrate(&model.Subscribe{})
 
 	if err != nil {
 		log.Fatal(err)
