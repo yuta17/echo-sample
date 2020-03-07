@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+  db:
+    image: mysql:5.7
+    hostname: hyperlp
+    ports:
+      - 3307:3306
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: dev
+      MYSQL_USERNAME: dev
+      MYSQL_PASSWORD: dev

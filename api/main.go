@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"os"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -12,8 +13,7 @@ import (
 
 type Subscribe struct {
 	gorm.Model
-	ID    int    `gorm:"primary_key`
-	Email string `json:email`
+	Email string `gorm:"unique;not null"`
 }
 
 func createSubscribe(c echo.Context) error {
@@ -41,9 +41,8 @@ func InitMigrate() {
 		log.Fatal("Error loading .env file")
 	}
 
-	db, err := gorm.Open("mysql",
-		os.Getenv("DB_USERNAME")+":"+os.Getenv("DB_PASSWORD")+"@tcp("+os.Getenv("DB_HOST")+":"+os.Getenv("DB_PORT")+")/"+os.Getenv("DB_DATABASE")+"?charset=utf8mb4&parseTime=True&loc=Local",
-	)
+	hoge := os.Getenv("DB_USERNAME") + ":" + os.Getenv("DB_PASSWORD") + "@tcp(" + os.Getenv("DB_HOST") + ":" + os.Getenv("DB_PORT") + ")/" + os.Getenv("DB_DATABASE") + "?charset=utf8mb4&parseTime=True&loc=Local"
+	db, err := gorm.Open("mysql", hoge)
 
 	defer db.Close()
 	db.AutoMigrate(&Subscribe{})
@@ -67,3 +66,5 @@ func main() {
 	// Start server
 	e.Logger.Fatal(e.Start(":1323"))
 }
+
+// curl -X POST http://localhost:1323/subscribes -H 'Content-Type: application/json' -d '{"email":"joe@labstack"}'
