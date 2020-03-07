@@ -10,7 +10,7 @@ import (
 	"github.com/yuta17/hyperlp/model"
 )
 
-func db() *gorm.DB {
+func DB() *gorm.DB {
 	err := godotenv.Load()
 
 	if err != nil {
@@ -20,7 +20,7 @@ func db() *gorm.DB {
 	dbInfo := os.Getenv("DB_USERNAME") + ":" + os.Getenv("DB_PASSWORD") + "@tcp(" + os.Getenv("DB_HOST") + ":" + os.Getenv("DB_PORT") + ")/" + os.Getenv("DB_DATABASE") + "?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open("mysql", dbInfo)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 
 	return db
