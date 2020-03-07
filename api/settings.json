@@ -1,5 +1,11 @@
 {
   "go.toolsEnvVars": { "GO111MODULE": "on" },
   "go.formatTool": "goimports",
-  "go.formatOnSave": true
+  "go.formatOnSave": true,
+  "go.editor.formatOnSave": true,
+  "go.editor.codeActionsOnSave": {
+    "source.organizeImports": true
+  },
+  "go.editor.codeActionsOnSaveTimeout": 5000,
+  "go.useLanguageServer": true
 }
