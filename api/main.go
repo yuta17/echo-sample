@@ -31,7 +31,7 @@ func createSubscribe(c echo.Context) error {
 }
 
 func main() {
-	database.InitMigrate()
+	database.InitMigrate(database.db())
 	e := echo.New()
 
 	// Middleware
