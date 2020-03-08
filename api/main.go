@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/yuta17/hyperlp/controller"
 	"github.com/yuta17/hyperlp/database"
 )
@@ -13,8 +14,8 @@ func main() {
 	e := echo.New()
 
 	// Middleware
-	// e.Use(middleware.Logger())
-	// e.Use(middleware.Recover())
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
 
 	// Routes
 	e.POST("/subscribes", controller.CreateSubscribe)
