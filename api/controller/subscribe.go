@@ -3,31 +3,38 @@ package controller
 import (
 	"net/http"
 
+	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo/v4"
-	log "github.com/sirupsen/logrus"
-	"github.com/yuta17/hyperlp/database"
 	"github.com/yuta17/hyperlp/model"
-	"github.com/yuta17/hyperlp/repository"
 	"github.com/yuta17/hyperlp/service"
 )
 
 type SubscribeController struct {
-	repo    repository.SubscribeRepository
 	service *service.SubscribeService
+	db      *gorm.DB
+}
+
+func NewSubscribeController(service *service.SubscribeService, db *gorm.DB) *SubscribeController {
+	return &SubscribeController{
+		service: service,
+		db:      db,
+	}
 }
 
 func (s *SubscribeController) CreateSubscribe(c echo.Context) error {
-	db := database.DB()
-	defer db.Close()
-
+	db := s.db
 	subscribe := new(model.Subscribe)
 	if err := c.Bind(subscribe); err != nil {
 		return err
 	}
 
-	if err := db.Create(&subscribe).Error; err != nil {
-		log.Error(err)
+	IsDuplicatedEmail, err := s.service.IsDuplicated(subscribe.Email)
+	if IsDuplicatedEmail == true {
+		return c.JSON(422, "this email has been registered.")
+	}
+
+	if err = db.Create(&subscribe).Error; err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
-	return c.JSON(http.StatusOK, subscribe)
+	return c.JSON(http.StatusCreated, subscribe)
 }

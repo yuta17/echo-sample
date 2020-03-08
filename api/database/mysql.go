@@ -27,6 +27,5 @@ func DB() *gorm.DB {
 }
 
 func InitMigrate(db *gorm.DB) {
-	defer db.Close()
 	db.AutoMigrate(&model.Subscribe{})
 }
