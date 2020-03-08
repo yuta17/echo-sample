@@ -7,9 +7,16 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/yuta17/hyperlp/database"
 	"github.com/yuta17/hyperlp/model"
+	"github.com/yuta17/hyperlp/repository"
+	"github.com/yuta17/hyperlp/service"
 )
 
-func CreateSubscribe(c echo.Context) error {
+type SubscribeController struct {
+	repo    repository.SubscribeRepository
+	service *service.SubscribeService
+}
+
+func (s *SubscribeController) CreateSubscribe(c echo.Context) error {
 	db := database.DB()
 	defer db.Close()
 
