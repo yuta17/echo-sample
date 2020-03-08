@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	log "github.com/sirupsen/logrus"
 	"github.com/yuta17/hyperlp/database"
 	"github.com/yuta17/hyperlp/model"
 )
@@ -17,6 +18,9 @@ func CreateSubscribe(c echo.Context) error {
 		return err
 	}
 
-	db.Create(&subscribe)
-	return c.String(http.StatusOK, "OK")
+	if err := db.Create(&subscribe).Error; err != nil {
+		log.Error(err)
+		return c.JSON(http.StatusInternalServerError, err)
+	}
+	return c.JSON(http.StatusOK, subscribe)
 }
